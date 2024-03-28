@@ -1,0 +1,43 @@
+.form{
+	display: flex;
+	width: 100vw;
+	height: 3.375rem;
+	justify-content: center;
+	gap: 0.5rem;
+	margin-top: -1.6875rem;
+
+	> input{
+		width: 37.875rem;
+		padding: 0 1rem;
+		height: 3.375rem;
+		border-radius: 0.5rem;
+		border: 1px solid #0D0D0D;
+		background-color: #333333;
+		outline: none;
+		color: white;
+		font-family: "Inter", sans-serif;
+
+		&::placeholder{
+			color: #808080;
+		}
+	}
+
+	> button{
+		width: fit-content;
+		height: 3.375rem;
+		padding: 1rem;
+		border-radius: 0.5rem;
+		background-color: #1E6F9F;
+		font-family: "Inter", sans-serif;
+		border: none;
+		cursor: pointer;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 700;
+		color: white;
+		font-size: 0.875rem;
+		line-height: 1.125rem;
+	}
+}
