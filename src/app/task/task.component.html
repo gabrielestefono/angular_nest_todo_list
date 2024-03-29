@@ -1,7 +1,7 @@
 <div class="task">
-	<button class="made"></button>
-	<p>integer.</p>
-	<button>
+	<button [ngClass]="{'made': task.concluida, '': !task.concluida}" (click)="marcarComoConcluido(task.id)"></button>
+	<p>{{ task.nome }}</p>
+	<button (click)="excluirTarefa(task.id)">
 		<img src="../../assets/imagens/lixo.svg" alt="excluir tarefa">
 	</button>
 </div>

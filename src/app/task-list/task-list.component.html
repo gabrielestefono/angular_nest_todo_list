@@ -12,8 +12,8 @@
 		</div>
 		<hr>
 		<div>
-			<!-- <app-empty-state></app-empty-state> -->
-			<app-task></app-task>
+			<app-empty-state *ngIf="!tasks"></app-empty-state>
+			<app-task  *ngFor="let task of tasks" [task]="task"></app-task>
 		</div>
 	</div>
 </div>

@@ -7,6 +7,9 @@ import { TaskComponent } from './task/task.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { FormComponent } from './form/form.component';
 import { HeaderComponent } from './header/header.component';
+import { HttpClientModule } from '@angular/common/http';
+import { EmptyStateComponent } from './empty-state/empty-state.component';
+import WebService from '../webservice';
 
 @NgModule({
   declarations: [
@@ -15,13 +18,16 @@ import { HeaderComponent } from './header/header.component';
     TaskComponent,
     TaskListComponent,
     FormComponent,
+    EmptyStateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    WebService
   ],
   bootstrap: [AppComponent]
 })
