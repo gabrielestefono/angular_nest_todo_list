@@ -46,7 +46,6 @@ export class TaskService {
 
 	delete(id: number){
 		const task = this.tasks.findIndex(task => task.id === id);
-		console.log(task);
 		if(task >= 0){
 			this.tasks.splice(task, 1);
 			return;
