@@ -20,6 +20,22 @@
           tap(response => this._tasks.next(response))
         )
         .subscribe({
+          next: response => this.tasks = response,
+          error: error => console.log(error)
+        });
+      }
+
+    public createTask(taskName: string): void {
+      this.http.post('https://angular-nest-todo-list-backend.vercel.app/task', {
+        id: this.tasks.length + 1,
+        nome: taskName,
+        concluida: false,
+        deletedAt: null
+      })
+        .pipe(
+          tap(() => this.getTasks())
+        )
+        .subscribe({
           next: response => {},
           error: error => console.log(error)
         });

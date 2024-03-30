@@ -1,15 +1,22 @@
 import { Component, OnInit } from '@angular/core';
+import WebService from '../../webservice';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit {
+export class FormComponent{
+  task: string = "";
 
-  constructor() { }
+  constructor(private WebService: WebService) {}
 
-  ngOnInit(): void {
+  enviarDados(event: MouseEvent){
+    if(this.task != ''){
+      event.preventDefault();
+      this.WebService.createTask(this.task);
+      this.task = '';
+    }    
   }
 
 }

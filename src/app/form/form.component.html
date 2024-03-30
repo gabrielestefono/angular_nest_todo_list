@@ -1,6 +1,6 @@
-<form action="" class="form">
-	<input type="text" placeholder="Adicione uma nova tarefa">
-	<button>
+<form class="form">
+	<input type="text" placeholder="Adicione uma nova tarefa" [(ngModel)]="task" name="task" required>
+	<button (click)="enviarDados($event)">
 		Criar
 		<img src="../../assets/imagens/icons/plus.svg" alt="Criar nova Tarefa">
 	</button>
