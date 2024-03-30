@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import WebService from '../../webservice';
 
 @Component({
@@ -12,10 +12,10 @@ export class TaskListComponent implements OnInit {
   constructor(private webService: WebService) { }
 
   ngOnInit(): void {
-    this.getTasks();
-  }
-
-  public getTasks(): void {
-    this.tasks = this.webService.getTasks();
+    this.webService.tasks$.subscribe(tasks => { 
+      this.tasks = tasks;
+    });
+   
+    this.webService.getTasks();
   }
 }

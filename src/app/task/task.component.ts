@@ -11,12 +11,8 @@ export class TaskComponent {
 
   constructor(private WebService: WebService) {}
 
-  ngOnInit(): void {
-    console.log(this.task);
-  }
-
   marcarComoConcluido(id: number){
-    this.WebService.marcarComoConcluído(id);
+    this.WebService.marcarComoConcluido(id);
   }
 
   excluirTarefa(id: number){
