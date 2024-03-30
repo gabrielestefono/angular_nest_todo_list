@@ -3,11 +3,12 @@
 		<div>
 			<div class="created">
 				<p>Tarefas criadas</p>
-				<span>0</span>
+				<span>{{tasksCount}}</span>
 			</div>
 			<div class="concluded">
 				<p>Concluídas</p>
-				<span>0</span>
+				<span *ngIf="tasksCountConcluded > 0">{{tasksCountConcluded}} de {{tasksCount}}</span>
+				<span *ngIf="tasksCountConcluded == 0">0</span>
 			</div>
 		</div>
 		<hr>
