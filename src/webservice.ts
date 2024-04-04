@@ -27,10 +27,8 @@
 
     public createTask(taskName: string): void {
       this.http.post('https://angular-nest-todo-list-backend.vercel.app/task', {
-        id: this.tasks.length + 1,
         nome: taskName,
         concluida: false,
-        deletedAt: null
       })
         .pipe(
           tap(() => this.getTasks())
