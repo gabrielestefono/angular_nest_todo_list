@@ -11,20 +11,32 @@
     public tasks: any;
     private _tasks: BehaviorSubject<any> = new BehaviorSubject<any>([]);
     public tasks$: Observable<any> = this._tasks.asObservable();
+    private _backend = 'https://angular-nest-todo-list-backend.vercel.app/';
 
     constructor(private http: HttpClient){}
 
     public getTasks(): void {
-      const headers = new HttpHeaders().set('Cache-Control', 'no-cache');
-      this.http.get('https://angular-nest-todo-list-backend.vercel.app/task', {headers})
-        .pipe(
-          tap(response => this._tasks.next(response))
-        )
-        .subscribe({
-          next: response => this.tasks = response,
-          error: error => console.log(error)
-        });
-      }
+      const headers = new Headers();
+      headers.append('Cache-Control', 'no-cache');
+    
+      fetch('https://angular-nest-todo-list-backend.vercel.app/task', {
+        method: 'GET',
+        headers: headers,
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        this.tasks = data;
+        this._tasks.next(data);
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+    }
 
     public createTask(taskName: string): void {
       this.http.post('https://angular-nest-todo-list-backend.vercel.app/task', {
