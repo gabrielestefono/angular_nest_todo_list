@@ -12,6 +12,28 @@ export class TaskComponent {
 
   constructor(private WebService: WebService) {}
 
+  editarTarefa(id: number){
+    Swal.fire({
+      title: "Editar tarefa",
+      text: "Digite o nome para a tarefa:",
+      color: 'white',
+      background: "#1A1A1A",
+      input: "text",
+      showCancelButton: true,
+      confirmButtonText: "Alterar",
+      confirmButtonColor: '#1E6F9F',
+      confirmButtonAriaLabel: "Confirmar alteração",
+      cancelButtonText: "Cancelar",
+      cancelButtonColor: '#5E60CE',
+      cancelButtonAriaLabel: "Cancelar Edição",
+      animation:true,
+    }).then((resposta)=>{
+      if(resposta.isConfirmed){
+        this.WebService.editarTarefa(id, resposta.value)
+      }
+    })
+  }
+
   marcarComoConcluido(id: number){
     this.WebService.marcarComoConcluido(id);
   }
@@ -31,6 +53,7 @@ export class TaskComponent {
       denyButtonAriaLabel: "Cancelar a ação",
       showCloseButton: true,
       showDenyButton: true,
+      focusConfirm: true
     }).then((result)=>{
       if(result.isConfirmed){
         this.WebService.excluirTarefa(id);

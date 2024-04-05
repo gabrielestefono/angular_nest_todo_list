@@ -71,6 +71,23 @@
       .catch(error => console.error('Houve um problema com a solicitação fetch:', error));
     };
 
+    public editarTarefa(id: number, taskName: string){
+      fetch(`${this._backend}task/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          nome: taskName,
+          concluida: false,
+        })
+      }).then(response => {
+        if(response.status == 200){
+          this.getTasks();
+        }else{
+          throw new Error('Houve um problema com a solicitação fetch:');
+        }
+      })
+      .catch(error => console.error('Houve um problema com a solicitação fetch:', error));
+    }
+
     public excluirTarefa(id: number)
     {
       fetch(`${this._backend}task/${id}`, {
