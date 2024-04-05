@@ -1,7 +1,6 @@
   import { Injectable } from '@angular/core';
-  import { HttpClient, HttpHeaders } from '@angular/common/http';
+  import { HttpClient } from '@angular/common/http';
   import { BehaviorSubject, Observable} from 'rxjs';
-  import { tap } from 'rxjs/operators';
 
   @Injectable({
     providedIn: 'root'
@@ -18,16 +17,16 @@
     public getTasks(): void {
       const headers = new Headers();
       headers.append('Cache-Control', 'no-cache');
-    
+
       fetch('https://angular-nest-todo-list-backend.vercel.app/task', {
         method: 'GET',
         headers: headers,
       })
       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        if (response.status == 200) {
+          return response.json();
         }
-        return response.json();
+        throw new Error('Network response was not ok');
       })
       .then(data => {
         this.tasks = data;
@@ -39,40 +38,51 @@
     }
 
     public createTask(taskName: string): void {
-      this.http.post('https://angular-nest-todo-list-backend.vercel.app/task', {
-        nome: taskName,
-        concluida: false,
+      fetch(`${this._backend}task`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nome: taskName,
+          concluida: false,
+        })
       })
-        .pipe(
-          tap(() => this.getTasks())
-        )
-        .subscribe({
-          next: response => {},
-          error: error => console.log(error)
-        });
+      .then(response => {
+        if(response.status == 201){
+          this.getTasks();
+        }else{
+          throw new Error('Houve um problema com a solicitação fetch:');
+        }
+      })
+      .catch(error => console.error('Houve um problema com a solicitação fetch:', error));
       }
 
     public marcarComoConcluido(id: number){
-      this.http.patch(`https://angular-nest-todo-list-backend.vercel.app/task/${id}`, {})
-        .pipe(
-          tap(() => this.getTasks())
-        )
-        .subscribe({
-          next: response => {},
-          error: error => console.log(error)
-        });  
-      }
-  
-    public excluirTarefa(id: number){
-      this.http.delete(`https://angular-nest-todo-list-backend.vercel.app/task/${id}`)
-       .pipe(
-         tap(() => this.getTasks())
-       )
-       .subscribe({
-        next: response => {},
-        error: error => console.log(error)
-      });
+      fetch(`${this._backend}task/${id}`, {
+        method: 'PATCH',
+      }).then(response => {
+        if(response.status == 200){
+          this.getTasks();
+        }else{
+          throw new Error('Houve um problema com a solicitação fetch:');
+        }
+      })
+      .catch(error => console.error('Houve um problema com a solicitação fetch:', error));
+    };
+
+    public excluirTarefa(id: number)
+    {
+      fetch(`${this._backend}task/${id}`, {
+        method: 'DELETE',
+      }).then(response => {
+        if(response.status == 200){
+            this.getTasks();
+        }else{
+          throw new Error('Houve um problema com a solicitação fetch:');
+        }
+      })
+      .catch(error => console.error('Houve um problema com a solicitação fetch:', error));
     }
   }
-
   export default WebService;
