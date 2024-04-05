@@ -11,6 +11,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { EmptyStateComponent } from './components/empty-state/empty-state.component';
 import { FormComponent } from './components/form/form.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { FormComponent } from './components/form/form.component';
     TaskComponent,
     TaskListComponent,
     FormComponent,
-    EmptyStateComponent
+    EmptyStateComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

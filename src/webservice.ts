@@ -18,7 +18,7 @@
       const headers = new Headers();
       headers.append('Cache-Control', 'no-cache');
 
-      fetch('https://angular-nest-todo-list-backend.vercel.app/task', {
+      fetch(`${this._backend}task`, {
         method: 'GET',
         headers: headers,
       })
@@ -36,6 +36,22 @@
         console.error('There was a problem with the fetch operation:', error);
       });
     }
+
+    public async getTask(id: number): Promise<Task> {
+      return fetch(`${this._backend}task/${id}`, {
+        method: 'GET',
+      })
+      .then(response => response.json())
+      .then(data => {
+        return new Task(
+          data.id,
+          data.nome,
+          data.concluida,
+          data.descricacao
+        );
+      });
+    }
+
 
     public createTask(taskName: string): void {
       fetch(`${this._backend}task`, {
