@@ -1,6 +1,7 @@
   import { Injectable } from '@angular/core';
   import { HttpClient } from '@angular/common/http';
   import { BehaviorSubject, Observable} from 'rxjs';
+import Task from './app/templates/task';
 
   @Injectable({
     providedIn: 'root'
@@ -10,7 +11,7 @@
     public tasks: any;
     private _tasks: BehaviorSubject<any> = new BehaviorSubject<any>([]);
     public tasks$: Observable<any> = this._tasks.asObservable();
-    private _backend = 'https://angular-nest-todo-list-backend.vercel.app/';
+    private _backend = 'http://localhost:3000/';
 
     constructor(private http: HttpClient){}
 
@@ -38,17 +39,19 @@
     }
 
     public async getTask(id: number): Promise<Task> {
-      return fetch(`${this._backend}task/${id}`, {
+      return await fetch(`${this._backend}task/${id}`, {
         method: 'GET',
       })
       .then(response => response.json())
       .then(data => {
-        return new Task(
+        let task = new Task(
           data.id,
           data.nome,
           data.concluida,
-          data.descricacao
+          data.description?.description
         );
+        console.log(task?.descricao);
+        return task
       });
     }
 

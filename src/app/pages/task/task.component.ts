@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import WebService from '../../../webservice';
 import { ActivatedRoute } from '@angular/router';
+import Task from '../../templates/task';
+import { error } from 'console';
 
 @Component({
   selector: 'app-task',
@@ -9,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TaskComponent implements OnInit{
   public task?: Task;
+  public isLoading: boolean = true;
 
   constructor(private webService: WebService, private route: ActivatedRoute){}
 
@@ -17,17 +20,16 @@ export class TaskComponent implements OnInit{
       const idParam: string | null = params.get('id');
       if (idParam !== null) {
         const id: number = parseInt(idParam);
-        this.getTask(id);
+        this.webService.getTask(id)
+        .then((resultado) => {
+          this.task = resultado;
+          this.isLoading = false;
+        })
+        .catch(error => {
+          console.log(error);
+          this.isLoading = false;
+        })
       }
     });
-  }
-
-
-  async getTask(id: number): Promise<void> {
-    try {
-      this.task = await this.webService.getTask(id);
-    } catch (error) {
-      console.error('Erro ao obter a tarefa:', error);
-    }
   }
 }

@@ -11,3 +11,5 @@ class Task{
     this.descricao = descricao;
   }
 }
+
+export default Task;
