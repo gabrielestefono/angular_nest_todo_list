@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import WebService from '../../../webservice';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-form',
@@ -9,12 +9,21 @@ import WebService from '../../../webservice';
 export class FormComponent{
   task: string = "";
 
-  constructor(private WebService: WebService) {}
+  constructor(
+    private taskService: TaskService
+  ) {}
 
   enviarDados(event: MouseEvent){
     if(this.task != ''){
       event.preventDefault();
-      this.WebService.createTask(this.task);
+      this.taskService.criarTarefa(this.task).subscribe({
+        next: (response) => {
+          if(response){
+            this.taskService.buscarTarefas();
+          }
+        },
+        error: (error) => console.log(error)
+      })
       this.task = '';
     }
   }

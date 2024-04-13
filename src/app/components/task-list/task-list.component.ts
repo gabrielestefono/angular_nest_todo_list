@@ -1,5 +1,7 @@
 import { Component, OnInit} from '@angular/core';
-import WebService from '../../../webservice';
+import { Task } from '../../models/task.interface';
+import { TaskService } from '../../services/task.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task-list',
@@ -7,31 +9,29 @@ import WebService from '../../../webservice';
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent implements OnInit {
-  public tasks: any;
+  public tasks: Task[] = [];
   public tasksCount: number = 0;
   public tasksCountConcluded: number = 0;
+  private tasksSubscription!: Subscription;
 
-  constructor(private webService: WebService) { }
+  constructor(private taskService: TaskService){}
 
   ngOnInit(): void {
-    this.webService.tasks$.subscribe(tasks => {
-      tasks.sort((a: any, b: any)=>{
-        if(a.concluida && !b.concluida){
-          return 1;
-        }else if (!a.concluida && b.concluida) {
-          return -1;
-        }else{
-          return 0;
-        }
-      })
+    this.tasksSubscription = this.taskService.tasks.subscribe(tasks => {
       this.tasks = tasks;
-      this.tasksCount = tasks.length;
-      let tasksConcluded = tasks.filter((task: any)=>{
-        return task.concluida;
-      })
-      this.tasksCountConcluded = tasksConcluded.length;
+      this.contarParametros();
     });
+  }
 
-    this.webService.getTasks();
+  ngOnDestroy(): void {
+    if (this.tasksSubscription) {
+      this.tasksSubscription.unsubscribe();
+    }
+  }
+
+  contarParametros(){
+    this.tasksCount = this.tasks.length;
+    let tasksConcluidas = this.tasks.filter((task) => task.concluida);
+    this.tasksCountConcluded = tasksConcluidas.length;
   }
 }

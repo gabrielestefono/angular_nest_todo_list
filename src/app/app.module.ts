@@ -4,7 +4,6 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import WebService from '../webservice';
 import { FormsModule } from '@angular/forms';
 import { TaskComponent } from './components/task/task.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -12,6 +11,8 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import { EmptyStateComponent } from './components/empty-state/empty-state.component';
 import { FormComponent } from './components/form/form.component';
 import { HomeComponent } from './pages/home/home.component';
+import { CommonModule } from '@angular/common';
+import { TarefaComponent } from './pages/tarefa/tarefa.component';
 
 @NgModule({
   declarations: [
@@ -21,17 +22,18 @@ import { HomeComponent } from './pages/home/home.component';
     TaskListComponent,
     FormComponent,
     EmptyStateComponent,
-    HomeComponent
+    HomeComponent,
+    TarefaComponent,
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserModule,
+    CommonModule
   ],
   providers: [
     provideClientHydration(),
-    WebService
   ],
   bootstrap: [AppComponent]
 })

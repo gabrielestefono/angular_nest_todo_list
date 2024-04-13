@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { TaskComponent } from './pages/task/task.component';
+import { TarefaComponent } from './pages/tarefa/tarefa.component';
 
 const routes: Routes = [
   {
     path: 'task/:id',
-    component: TaskComponent
+    component: TarefaComponent
   },
   {
     path: '',

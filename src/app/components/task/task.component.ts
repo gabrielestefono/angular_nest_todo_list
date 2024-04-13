@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import WebService from '../../../webservice';
 import Swal from 'sweetalert2'
+import { Task } from '../../models/task.interface';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-task',
@@ -8,9 +9,9 @@ import Swal from 'sweetalert2'
   styleUrls: ['./task.component.scss']
 })
 export class TaskComponent {
-  @Input() task: any;
+  @Input() task!: Task;
 
-  constructor(private WebService: WebService) {}
+  constructor(private taskService: TaskService) {}
 
   editarTarefa(id: number){
     Swal.fire({
@@ -29,13 +30,20 @@ export class TaskComponent {
       animation:true,
     }).then((resposta)=>{
       if(resposta.isConfirmed){
-        this.WebService.editarTarefa(id, resposta.value)
+        this.taskService.editarTarefa(id, resposta.value)
       }
     })
   }
 
   marcarComoConcluido(id: number){
-    this.WebService.marcarComoConcluido(id);
+    this.taskService.marcarTarefaComoConcluida(id).subscribe({
+      next: (response) => {
+        if(response){
+          this.taskService.buscarTarefas();
+        }
+      },
+      error: (error) =>console.log(error)
+    })
   }
 
   excluirTarefa(id: number){
@@ -56,7 +64,13 @@ export class TaskComponent {
       focusConfirm: true
     }).then((result)=>{
       if(result.isConfirmed){
-        this.WebService.excluirTarefa(id);
+        this.taskService.excluirTarefa(id).subscribe({
+          next: (response) => {
+            if(response){
+              this.taskService.buscarTarefas();
+            }
+          }
+        })
       }
     })
   }

@@ -1,0 +1,11 @@
+<div class="description-task">
+  <div>
+    <h1>{{task?.nome}}</h1>
+    <p *ngIf="task?.description">{{task?.description}}</p>
+  </div>
+  <div>
+    <a href="#" class="add-edit" *ngIf="!task?.description">Adicionar Descrição</a>
+    <a href="#" class="add-edit" *ngIf="task?.description">Alterar Descrição</a>
+    <a href="#" class="voltar">Voltar</a>
+  </div>
+</div>
