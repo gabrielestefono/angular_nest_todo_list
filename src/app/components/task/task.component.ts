@@ -8,8 +8,10 @@ import { TaskService } from '../../services/task.service';
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss']
 })
-export class TaskComponent {
+export class TaskComponent{
   @Input() task!: Task;
+  @Input() filho?: boolean;
+  @Input() pai?: number;
 
   constructor(private taskService: TaskService) {}
 
@@ -31,7 +33,11 @@ export class TaskComponent {
     }).then((resposta)=>{
       if(resposta.isConfirmed){
         this.taskService.editarTarefa(id, resposta.value).subscribe(() =>{
-          this.taskService.buscarTarefas();
+          if(this.filho){
+            this.taskService.buscarTarefa(this.pai!);
+          }else{
+            this.taskService.buscarTarefas();
+          }
         })
       }
     })
@@ -41,7 +47,11 @@ export class TaskComponent {
     this.taskService.marcarTarefaComoConcluida(id).subscribe({
       next: (response) => {
         if(response){
-          this.taskService.buscarTarefas();
+          if(this.filho){
+            this.taskService.buscarTarefa(this.pai!);
+          }else{
+            this.taskService.buscarTarefas();
+          }
         }
       },
       error: (error) =>console.log(error)
@@ -69,7 +79,11 @@ export class TaskComponent {
         this.taskService.excluirTarefa(id).subscribe({
           next: (response) => {
             if(response){
-              this.taskService.buscarTarefas();
+              if(this.filho){
+                this.taskService.buscarTarefa(this.pai!);
+              }else{
+                this.taskService.buscarTarefas();
+              }
             }
           }
         })

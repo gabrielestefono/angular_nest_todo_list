@@ -14,7 +14,12 @@
 		<hr>
 		<div>
 			<app-empty-state *ngIf="!tasks"></app-empty-state>
-			<app-task *ngFor="let task of tasks" [task]="task"></app-task>
+      <ng-container *ngIf="!filhos">
+        <app-task *ngFor="let task of tasks" [task]="task"></app-task>
+      </ng-container>
+      <ng-container *ngIf="filhos">
+        <app-task *ngFor="let task of tasks" [task]="task" [filho]="true" [pai]="tarefa"></app-task>
+      </ng-container>
 		</div>
 	</div>
 </div>

@@ -1,3 +1,4 @@
+<app-form [tarefa]="task?.id"></app-form>
 <div class="description-task">
   <div>
     <h1>{{task?.nome}}</h1>
@@ -9,3 +10,6 @@
     <a href="/" class="voltar">Voltar</a>
   </div>
 </div>
+<ng-container *ngIf="task && task.filhos && task.filhos.length > 0">
+  <app-task-list [filhos]="task.filhos" [tarefa]="task.id"></app-task-list>
+</ng-container>

@@ -42,11 +42,12 @@ export class TaskService {
     })
   }
 
-  criarTarefa(nome: string)
+  criarTarefa(nome: string, elemento_pai: number)
   {
     return this.http.post(`${this._backend}task`, {
       nome,
-      concluida: false
+      concluida: false,
+      elemento_pai,
     })
   }
 

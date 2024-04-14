@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 
 @Component({
@@ -8,6 +8,7 @@ import { TaskService } from '../../services/task.service';
 })
 export class FormComponent{
   task: string = "";
+  @Input() tarefa?: number;
 
   constructor(
     private taskService: TaskService
@@ -16,10 +17,14 @@ export class FormComponent{
   enviarDados(event: MouseEvent){
     if(this.task != ''){
       event.preventDefault();
-      this.taskService.criarTarefa(this.task).subscribe({
+      this.taskService.criarTarefa(this.task, this.tarefa ?? 0).subscribe({
         next: (response) => {
           if(response){
-            this.taskService.buscarTarefas();
+            if(!this.tarefa){
+              this.taskService.buscarTarefas();
+            }else{
+              this.taskService.buscarTarefa(this.tarefa);
+            }
           }
         },
         error: (error) => console.log(error)
