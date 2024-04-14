@@ -30,7 +30,9 @@ export class TaskComponent {
       animation:true,
     }).then((resposta)=>{
       if(resposta.isConfirmed){
-        this.taskService.editarTarefa(id, resposta.value)
+        this.taskService.editarTarefa(id, resposta.value).subscribe(() =>{
+          this.taskService.buscarTarefas();
+        })
       }
     })
   }

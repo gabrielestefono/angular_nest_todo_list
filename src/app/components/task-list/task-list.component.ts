@@ -18,7 +18,12 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     this.tasksSubscription = this.taskService.tasks.subscribe(tasks => {
-      this.tasks = tasks;
+      const completedTasks = tasks.filter(task => task.concluida === true);
+      const uncompletedTasks = tasks.filter(task => task.concluida !== true);
+      uncompletedTasks.sort((a, b) => a.nome.localeCompare(b.nome));
+      completedTasks.sort((a, b) => a.nome.localeCompare(b.nome));
+      const sortedTasks = [...uncompletedTasks, ...completedTasks];
+      this.tasks = sortedTasks;
       this.contarParametros();
     });
   }
