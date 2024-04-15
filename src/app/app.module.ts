@@ -13,6 +13,9 @@ import { FormComponent } from './components/form/form.component';
 import { HomeComponent } from './pages/home/home.component';
 import { CommonModule } from '@angular/common';
 import { TarefaComponent } from './pages/tarefa/tarefa.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegistrarComponent } from './pages/registrar/registrar.component';
+import { RecuperacaoComponent } from './pages/recuperacao/recuperacao.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +27,9 @@ import { TarefaComponent } from './pages/tarefa/tarefa.component';
     EmptyStateComponent,
     HomeComponent,
     TarefaComponent,
+    LoginComponent,
+    RegistrarComponent,
+    RecuperacaoComponent,
   ],
   imports: [
     AppRoutingModule,
