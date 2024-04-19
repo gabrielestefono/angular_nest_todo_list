@@ -16,7 +16,9 @@ export class TaskListComponent implements OnInit {
   @Input() filhos?: Task[];
   @Input() tarefa?: number;
 
-  constructor(private taskService: TaskService){}
+  constructor(
+    private taskService: TaskService
+  ){}
 
   ngOnInit(): void {
     if(this.filhos){
@@ -31,7 +33,7 @@ export class TaskListComponent implements OnInit {
         this.contarParametros();
       });
     }else{
-      this.tasksSubscription = this.taskService.tasks.subscribe(tasks => {
+        this.tasksSubscription = this.taskService.tasks.subscribe(tasks => {
         const completedTasks = tasks.filter(task => task.concluida === true);
         const uncompletedTasks = tasks.filter(task => task.concluida !== true);
         uncompletedTasks.sort((a, b) => a.nome.localeCompare(b.nome));

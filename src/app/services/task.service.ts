@@ -1,4 +1,5 @@
-import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Task } from '../models/task.interface';
@@ -24,54 +25,70 @@ export class TaskService {
     return this._task.asObservable();
   }
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private readonly cookieService: CookieService,
+  ) {
     this.buscarTarefas();
   }
 
   buscarTarefas(): void
   {
-    this.http.get<Task[]>(`${this._backend}task`).subscribe(tasks => {
+    const token = this.cookieService.get('jwt_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.http.get<Task[]>(`${this._backend}task`, { headers }).subscribe(tasks => {
       this._tasks.next(tasks);
     });
   }
 
   buscarTarefa(id: number)
   {
-    return this.http.get<Task>(`${this._backend}task/${id}`).subscribe(task => {
+    const token = this.cookieService.get('jwt_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Task>(`${this._backend}task/${id}`, { headers }).subscribe(task => {
       this._task.next(task);
     })
   }
 
   criarTarefa(nome: string, elemento_pai: number)
   {
+    const token = this.cookieService.get('jwt_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.post(`${this._backend}task`, {
       nome,
       concluida: false,
       elemento_pai,
-    })
+    }, { headers })
   }
 
   editarTarefa(id: number, nome: string): Observable<any>
   {
-    console.log(id)
+    const token = this.cookieService.get('jwt_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.patch(`${this._backend}task/nome/${id}`, {
       nome,
-    })
+    }, { headers })
   }
 
   atualizarDescricao(id: number, descricaoComQuebraDeLinha: string){
+    const token = this.cookieService.get('jwt_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.patch(`${this._backend}task/description/${id}`, {
       description: descricaoComQuebraDeLinha
-    })
+    }, { headers })
   }
 
   marcarTarefaComoConcluida(id: number)
   {
-    return this.http.patch(`${this._backend}task/${id}`, {})
+    const token = this.cookieService.get('jwt_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.patch(`${this._backend}task/${id}`, {}, { headers })
   }
 
   excluirTarefa(id: number)
   {
-    return this.http.delete(`${this._backend}task/${id}`)
+    const token = this.cookieService.get('jwt_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${this._backend}task/${id}`, { headers })
   }
 }
