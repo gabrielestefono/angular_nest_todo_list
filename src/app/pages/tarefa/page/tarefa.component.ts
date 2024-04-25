@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Task } from '../../models/task.interface';
-import { TaskService } from '../../services/task.service';
+import { Task } from '../../../models/task.interface';
+import { TaskService } from '../../../services/task.service';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';

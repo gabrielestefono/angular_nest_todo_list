@@ -1,7 +1,7 @@
-import { Component, Input, OnInit} from '@angular/core';
-import { Task } from '../../models/task.interface';
-import { TaskService } from '../../services/task.service';
+import { Component, Inject, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import { Subscription } from 'rxjs';
+import { TaskService } from '../../../services/task.service';
+import { Task } from '../../../models/task.interface';
 
 @Component({
   selector: 'app-task-list',
@@ -17,7 +17,8 @@ export class TaskListComponent implements OnInit {
   @Input() tarefa?: number;
 
   constructor(
-    private taskService: TaskService
+    private taskService: TaskService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ){}
 
   ngOnInit(): void {

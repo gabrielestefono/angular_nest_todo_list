@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import Swal from 'sweetalert2'
-import { Task } from '../../models/task.interface';
-import { TaskService } from '../../services/task.service';
+import { TaskService } from '../../../services/task.service';
+import { Task } from '../../../models/task.interface';
 
 @Component({
   selector: 'app-task',

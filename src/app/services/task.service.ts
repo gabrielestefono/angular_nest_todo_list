@@ -35,19 +35,25 @@ export class TaskService {
   buscarTarefas(): void
   {
     const token = this.cookieService.get('jwt_token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    this.http.get<Task[]>(`${this._backend}task`, { headers }).subscribe(tasks => {
-      this._tasks.next(tasks);
-    });
+    if(token){
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      this.http.get<Task[]>(`${this._backend}task`, { headers }).subscribe(tasks => {
+        this._tasks.next(tasks);
+      });
+    }
   }
 
   buscarTarefa(id: number)
   {
     const token = this.cookieService.get('jwt_token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<Task>(`${this._backend}task/${id}`, { headers }).subscribe(task => {
-      this._task.next(task);
-    })
+    if(token){
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.http.get<Task>(`${this._backend}task/${id}`, { headers }).subscribe(task => {
+        this._task.next(task);
+      })
+    }else{
+      return  new BehaviorSubject<Task[]>([]);
+    }
   }
 
   criarTarefa(nome: string, elemento_pai: number)

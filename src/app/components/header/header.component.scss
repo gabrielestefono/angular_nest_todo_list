@@ -6,10 +6,27 @@
 	align-items: center;
 	background-color: #0D0D0D;
 
-	> div{
+	> div:first-child{
 		width: 100%;
 		max-width: 46rem;
 		display: flex;
 		justify-content: center;
 	}
+}
+
+.logout{
+  position: absolute;
+  width: 1.875rem;
+  height: 1.875rem;
+  right: 100px;
+  top: 100px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+
+  > svg{
+    fill: white;
+  }
 }
