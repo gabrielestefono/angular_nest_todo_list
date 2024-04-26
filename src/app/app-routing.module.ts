@@ -22,6 +22,14 @@ const routes: Routes = [
     path: 'recuperacao',
     loadChildren: () => import('./pages/recuperacao/recuperacao.module').then((module) => module.RecuperacaoModule),
   },
+  {
+    path: 'confirmacao',
+    loadChildren: () => import('./pages/confirmacao/confirmacao.module').then((module) => module.ConfirmacaoModule),
+  },
+  {
+    path: 'confirmar',
+    loadChildren: () => import('./pages/confirmar/confirmar.module').then((module) => module.ConfirmarModule),
+  },
 ];
 
 @NgModule({

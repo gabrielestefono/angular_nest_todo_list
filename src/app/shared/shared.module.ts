@@ -4,7 +4,7 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import { EmptyStateComponent } from './components/empty-state/empty-state.component';
 import { TaskComponent } from './components/task/task.component';
 import { FormComponent } from './components/form/form.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -17,7 +17,8 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     TaskListComponent,

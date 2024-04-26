@@ -1,4 +1,4 @@
-<app-form [tarefa]="task?.id"></app-form>
+<app-form [tarefa]="task!.id" (formEvent)="handleFormAction($event)"></app-form>
 <div class="description-task">
   <div>
     <h1>{{task?.nome}}</h1>

@@ -6,7 +6,6 @@ import { TarefaComponent } from './page/tarefa.component';
 import { SharedModule } from '../../shared/shared.module';
 
 
-
 @NgModule({
   declarations: [
     TarefaComponent
@@ -14,7 +13,7 @@ import { SharedModule } from '../../shared/shared.module';
   imports: [
     CommonModule,
     RouterModule.forChild(TarefaComponentRouting),
-    SharedModule
+    SharedModule,
   ]
 })
 export class TarefaModule { }

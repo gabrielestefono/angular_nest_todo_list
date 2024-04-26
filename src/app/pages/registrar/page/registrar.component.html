@@ -2,13 +2,17 @@
   <div>
     <form [formGroup]="formularioRegistro" (ngSubmit)="criarUsuario()">
       <label for="nome">Nome</label>
-      <input type="text" name="nome" id="nome" placeholder="Digite o seu nome" formControlName="nome">
+      <input type="text" name="nome" id="nome" placeholder="Digite o seu nome" formControlName="nome"
+        [class.invalido]="formularioRegistro.get('nome')!.hasError('invalido')">
       <label for="email">Email</label>
-      <input type="email" name="email" id="email" placeholder="Digite o seu email" formControlName="email">
+      <input type="email" name="email" id="email" placeholder="Digite o seu email" formControlName="email"
+        [class.invalido]="formularioRegistro.get('email')!.hasError('invalido')">
       <label for="senha">Senha</label>
-      <input type="password" name="senha" id="senha" placeholder="Digite a sua senha" formControlName="senha">
+      <input type="password" name="senha" id="senha" placeholder="Digite a sua senha" formControlName="senha"
+        [class.invalido]="formularioRegistro.get('senha')!.hasError('invalido')">
       <label for="senha">Confirme sua senha</label>
-      <input type="password" name="senha_confirmacao" id="senha_confirmacao" placeholder="Confirmação de senha" formControlName="senha_confirmacao">
+      <input type="password" name="senha_confirmacao" id="senha_confirmacao" placeholder="Confirmação de senha" formControlName="senha_confirmacao"
+        [class.invalido]="formularioRegistro.get('senha_confirmacao')!.hasError('invalido')">
       <button type="submit">Registre-se</button>
     </form>
     <p>Já possui uma conta? <a href="/login">Entre aqui</a></p>

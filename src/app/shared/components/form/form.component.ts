@@ -1,35 +1,31 @@
-import { Component, Input } from '@angular/core';
-import { TaskService } from '../../../services/task.service';
-
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { FormAction } from '../../../models/shared/interfaces/form.interface';
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent{
-  task: string = "";
-  @Input() tarefa?: number;
-
   constructor(
-    private taskService: TaskService
-  ) {}
+    private form: FormBuilder,
+  ){}
+  @Input() tarefa!: number;
+  @Output() formEvent = new EventEmitter<FormAction>();
 
-  enviarDados(event: MouseEvent){
-    if(this.task != ''){
-      event.preventDefault();
-      this.taskService.criarTarefa(this.task, this.tarefa ?? 0).subscribe({
-        next: (response) => {
-          if(response){
-            if(!this.tarefa){
-              this.taskService.buscarTarefas();
-            }else{
-              this.taskService.buscarTarefa(this.tarefa);
-            }
-          }
-        },
-        error: (error) => console.log(error)
-      })
-      this.task = '';
+  public formModel = this.form.group({
+    task: ["", Validators.required]
+  })
+
+  public handleFormEvent(): void
+  {
+    if(this.formModel.valid){
+      const formEventData: FormAction = {
+        task: this.formModel.value.task!
+      };
+      // Emitir o valor do evento
+      this.formEvent.emit(formEventData);
+      this.formModel.reset();
     }
   }
 }

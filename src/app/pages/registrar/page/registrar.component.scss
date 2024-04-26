@@ -31,6 +31,10 @@
         &::placeholder{
           color: #808080;
         }
+
+        &.invalido{
+          border: 1px solid red;
+        }
       }
 
       > a{

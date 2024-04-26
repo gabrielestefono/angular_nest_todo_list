@@ -2,9 +2,11 @@
   <div>
     <form [formGroup]="formularioLogin" (ngSubmit)="fazerLogin()">
       <label for="email">Email</label>
-      <input type="email" name="email" id="email" placeholder="Digite o seu email" formControlName="email">
+      <input type="email" name="email" id="email" placeholder="Digite o seu email" formControlName="email"
+        [class.incorrect]="formularioLogin.get('email')?.hasError('incorreto')">
       <label for="senha">Senha</label>
-      <input type="password" name="senha" id="senha" placeholder="Digite a sua senha" formControlName="senha">
+      <input type="password" name="senha" id="senha" placeholder="Digite a sua senha" formControlName="senha"
+        [class.incorrect]="formularioLogin.get('senha')?.hasError('incorreto')">
       <a href="/recuperacao">Esqueceu sua senha?</a>
       <button type="submit">Login</button>
     </form>

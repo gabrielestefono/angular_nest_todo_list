@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, PLATFORM_ID} from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TaskService } from '../../../services/task.service';
 import { Task } from '../../../models/task.interface';
@@ -18,7 +18,6 @@ export class TaskListComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    @Inject(PLATFORM_ID) private platformId: Object,
   ){}
 
   ngOnInit(): void {

@@ -1,7 +1,7 @@
-<form class="form">
-	<input type="text" *ngIf="!tarefa" placeholder="Adicione uma nova tarefa" [(ngModel)]="task" name="task" required>
-  <input type="text" *ngIf="tarefa" placeholder="Adicione uma nova subtarefa" [(ngModel)]="task" name="task" required>
-	<button (click)="enviarDados($event)">
+<form class="form" [formGroup]="formModel" (ngSubmit)="handleFormEvent()">
+	<input type="text" *ngIf="!tarefa" placeholder="Adicione uma nova tarefa" name="task" formControlName="task">
+  <input type="text" *ngIf="tarefa" placeholder="Adicione uma nova subtarefa" name="task" formControlName="task">
+	<button type="submit">
 		Criar
 		<img src="../../assets/imagens/icons/plus.svg" alt="Criar nova Tarefa">
 	</button>

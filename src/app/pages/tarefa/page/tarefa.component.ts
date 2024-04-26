@@ -4,26 +4,31 @@ import { TaskService } from '../../../services/task.service';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
+import { FormAction } from '../../../models/shared/interfaces/form.interface';
 
 @Component({
   selector: 'app-tarefa',
   templateUrl: './tarefa.component.html',
   styleUrl: './tarefa.component.scss'
 })
-export class TarefaComponent {
-  public task?: Task;
-  public isLoading: boolean = true;
-  private taskSubscription!: Subscription;
 
-  constructor(private taskService: TaskService, private route: ActivatedRoute){
-    let id!: number;
+export class TarefaComponent {
+  constructor(
+    private taskService: TaskService,
+    private route: ActivatedRoute
+  ){
     this.route.paramMap.subscribe(params => {
       if(params.get('id') != undefined){
-        id = parseInt(params.get('id')!);
-        this.taskService.buscarTarefa(id)
+        this.id = parseInt(params.get('id')!);
+        this.taskService.buscarTarefa(this.id)
       }
     });
   }
+
+  private taskSubscription!: Subscription;
+  public task?: Task;
+  public id!: number;
+  public isLoading: boolean = true;
 
   ngOnInit(): void {
     let id!: number;
@@ -34,6 +39,22 @@ export class TarefaComponent {
         })
       }
     });
+  }
+
+  handleFormAction(formulario: FormAction): void
+  {
+    this.enviarDados(formulario);
+  }
+
+  enviarDados(homeAction: FormAction){
+    this.taskService.criarTarefa(homeAction.task, this.id).subscribe({
+      next: (response) => {
+        if(response){
+          this.taskService.buscarTarefa(this.id);
+        }
+      },
+      error: (error) => console.log(error)
+    })
   }
 
   adicionarDescricao(event: MouseEvent){
