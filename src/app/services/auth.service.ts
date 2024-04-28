@@ -61,6 +61,21 @@ export class AuthService {
     return new Observable<boolean>();
   }
 
+  verificarSeTokenValido(token: string){
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this._backend}user/verificar-token`, {headers});
+  }
+
+  enviarEmailRecuperacao(email: string){
+    return this.http.post(`${this._backend}user/recuperacao`, {email})
+  }
+
+  mudarSenha(senha: string, token: string): Observable<any>
+  {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this._backend}user/mudar-senha`, {senha}, {headers})
+  }
+
   retornarLogin(): BehaviorSubject<boolean> {
     return this.loginStatus;
   }

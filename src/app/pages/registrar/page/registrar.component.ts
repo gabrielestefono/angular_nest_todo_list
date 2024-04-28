@@ -4,6 +4,7 @@ import { AuthService } from '../../../services/auth.service';
 import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from '../../../services/error.service';
 
 @Component({
   selector: 'app-registrar',
@@ -17,6 +18,7 @@ export class RegistrarComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private toaster: ToastrService,
+    private errorService: ErrorService,
   ){}
 
   public formularioRegistro = this.formBuilder.group({
@@ -57,8 +59,18 @@ export class RegistrarComponent {
         }
       },
       error: (error: HttpErrorResponse) => {
-        // TODO: Enviar email para mim mesmo em caso de erro!
-        this.toaster.error("Ocorreu um erro, por favor, tente novamente mais tarde!");
+        this.errorService.enviarErro(error.status, error.error.message, 'Registrar').subscribe({
+          next: response => {
+            if(response){
+              this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
+            }
+          },
+          error: response => {
+            if(response){
+              this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
+            }
+          }
+        })
       }
     })
   }

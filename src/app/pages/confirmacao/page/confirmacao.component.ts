@@ -1,6 +1,9 @@
+import { ErrorService } from './../../../services/error.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from './../../../services/auth.service';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-confirmacao',
@@ -11,6 +14,8 @@ export class ConfirmacaoComponent{
   constructor(
     private authService: AuthService,
     private toaster: ToastrService,
+    private readonly router: Router,
+    private readonly errorService: ErrorService,
   ){}
 
   enviarEmailConfirmacao(): void
@@ -19,12 +24,23 @@ export class ConfirmacaoComponent{
       next: response => {
         if(response){
           this.toaster.success('Email enviado, por favor, verifique sua caixa de entrada!')
+          this.authService.logout();
+          this.router.navigate(['/login']);
         }
       },
-      error: error => {
-        // TODO: Enviar email com mensagem de erro para mim
-        console.log(error);
-        this.toaster.error("Algo deu errado, por favor, tente novamente em 5 minutos!")
+      error: (error: HttpErrorResponse) => {
+        this.errorService.enviarErro(error.status, error.error.message, 'Confirmação').subscribe({
+          next: response => {
+            if(response){
+              this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
+            }
+          },
+          error: response => {
+            if(response){
+              this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
+            }
+          }
+        })
       }
     })
   }

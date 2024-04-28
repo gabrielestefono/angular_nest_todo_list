@@ -30,6 +30,10 @@ const routes: Routes = [
     path: 'confirmar',
     loadChildren: () => import('./pages/confirmar/confirmar.module').then((module) => module.ConfirmarModule),
   },
+  {
+    path: 'recuperar',
+    loadChildren: () => import('./pages/recuperar/recuperar.module').then((module) => module.RecuperarModule),
+  },
 ];
 
 @NgModule({

@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from '../../../services/error.service';
+import { response } from 'express';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,8 @@ export class LoginComponent {
     private formBuilder: FormBuilder,
     private cookieService: CookieService,
     private router: Router,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private errorService: ErrorService,
   ){}
 
   public formularioLogin = this.formBuilder.group({
@@ -28,6 +31,8 @@ export class LoginComponent {
   })
 
   fazerLogin(){
+    // TODO: Refatorar código
+    // TODO: Melhorar mensagens
     if(this.formularioLogin.valid){
       this.authService.login(this.formularioLogin.value.email!, this.formularioLogin.value.senha!).subscribe({
         next: response => {
@@ -43,10 +48,23 @@ export class LoginComponent {
           if(error.status == 404){
             this.toaster.error('Usuário não encontrado!');
             this.formularioLogin.get('email')!.setErrors({incorreto: true});
-          }
-          if(error.status == 401){
+          }else if(error.status == 401){
             this.toaster.error('Senha inválida!');
             this.formularioLogin.get('senha')!.setErrors({ incorreto: true });
+          }
+          else{
+            this.errorService.enviarErro(error.status, error.error.message, 'login').subscribe({
+              next: response => {
+                if(response){
+                  this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
+                }
+              },
+              error: response => {
+                if(response){
+                  this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
+                }
+              }
+            })
           }
         }
       })

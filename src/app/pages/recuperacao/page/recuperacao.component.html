@@ -1,9 +1,10 @@
 <div class="login">
   <div>
-    <form action="">
+    <form [formGroup]="formularioRecuperacao" (ngSubmit)="enviarForm()">
       <label for="email">Email</label>
-      <input type="email" name="email" id="email" placeholder="Digite o seu email">
-      <button>Enviar email de Recuperação</button>
+      <input type="email" name="email" id="email" placeholder="Digite o seu email" formControlName="email"
+      [class.invalido]="formularioRecuperacao.get('email')?.hasError('invalido')" required>
+      <button type="submit">Enviar email de Recuperação</button>
     </form>
     <p>Se lembrou? <a href="/login">Voltar</a></p>
   </div>

@@ -17,9 +17,30 @@
         opacity: 0;
       }
 
-      > input{
+      > input:first-of-type{
         width: 21.875rem;
         padding: 0 1rem;
+        height: 3.375rem;
+        border-radius: 0.5rem;
+        border: 1px solid #0D0D0D;
+        background-color: #333333;
+        outline: none;
+        color: white;
+        font-family: "Inter", sans-serif;
+
+        &::placeholder{
+          color: #808080;
+        }
+
+        &.invalido{
+          border: 1px solid red;
+        }
+      }
+
+      > input:last-of-type{
+        width: 21.875rem;
+        padding: 0 1rem;
+        margin-top: 1.25rem;
         height: 3.375rem;
         border-radius: 0.5rem;
         border: 1px solid #0D0D0D;

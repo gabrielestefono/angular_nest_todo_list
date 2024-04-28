@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { RecuperacaoComponentRouting } from './recuperacao.routing';
-import { RecuperacaoComponent } from './page/recuperacao.component';
 import { SharedModule } from '../../shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RecuperacaoComponent } from './page/recuperacao.component';
 
 
 
@@ -14,7 +15,9 @@ import { SharedModule } from '../../shared/shared.module';
   imports: [
     CommonModule,
     RouterModule.forChild(RecuperacaoComponentRouting),
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class RecuperacaoModule { }

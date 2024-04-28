@@ -1,0 +1,12 @@
+<div class="login">
+  <div>
+    <form [formGroup]="formRecuperacao" (ngSubmit)="enviarForm()">
+      <label for="email">Email</label>
+      <input type="password" name="senha" id="senha" placeholder="Digite sua nova senha" formControlName="senha"
+      [class.invalido]="formRecuperacao.get('senha')?.hasError('invalido')" required>
+      <input type="password" name="confirmacao_senha" id="confirmacao_senha" placeholder="Confirma a sua nova senha" formControlName="confirmacao_senha"
+      [class.invalido]="formRecuperacao.get('confirmacao_senha')?.hasError('invalido')" required>
+      <button type="submit">Mudar senha</button>
+    </form>
+  </div>
+</div>
