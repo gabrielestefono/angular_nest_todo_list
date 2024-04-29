@@ -1,9 +1,11 @@
 import { AuthService } from './../../../services/auth.service';
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from '../../../services/error.service';
 
 @Component({
   selector: 'app-recuperar',
@@ -17,15 +19,24 @@ export class RecuperarComponent {
     private authService: AuthService,
     private router: Router,
     private platformLocation: PlatformLocation,
+    private errorService: ErrorService,
   ){}
 
   formRecuperacao = this.formBuilder.group({
-    senha: ["", [Validators.required]],
-    confirmacao_senha: ["", [Validators.required]],
+    senha: ["", [Validators.required, this.confirmacaoSenhaValidator(), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*["\'!@#$%¨&*()-=/*-+\\[\\]{}~^])[A-Za-z0-9"\'!@#$%¨&*()-=/*-+\\[\\]{}~^]{8,}')]],
+    confirmacao_senha: ["", [Validators.required, this.confirmacaoSenhaValidator(), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*["\'!@#$%¨&*()-=/*-+\\[\\]{}~^])[A-Za-z0-9"\'!@#$%¨&*()-=/*-+\\[\\]{}~^]{8,}')]],
   })
 
+  confirmacaoSenhaValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (!this.formRecuperacao) {
+        return null;
+      }
+      return control.value === this.formRecuperacao.controls.senha.value ? null : { 'confirmacaoInvalida': true };
+    };
+  }
+
   enviarForm(){
-    // TODO:  Fazer verificação se a senha é forte
     if(this.formRecuperacao.valid){
       const url = new URL(this.platformLocation.href);
       const token = url.searchParams.get('token');
@@ -40,8 +51,19 @@ export class RecuperarComponent {
             this.router.navigate(['/login']);
           }
         },
-        error: error => {
-          this.toaster.error('Ocorreu algum erro, tente novamente mais tarde')
+        error: (error: HttpErrorResponse) => {
+          this.errorService.enviarErro(error.status, error.error.message, 'Recuperar').subscribe({
+            next: response => {
+              if(response){
+                this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
+              }
+            },
+            error: (error: HttpErrorResponse) => {
+              if(error){
+                this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
+              }
+            }
+          })
         }
       })
     }else{

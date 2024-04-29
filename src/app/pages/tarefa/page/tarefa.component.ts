@@ -1,10 +1,14 @@
+import { AuthService } from './../../../services/auth.service';
 import { Component } from '@angular/core';
 import { Task } from '../../../models/task.interface';
 import { TaskService } from '../../../services/task.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { FormAction } from '../../../models/shared/interfaces/form.interface';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from '../../../services/error.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tarefa',
@@ -15,7 +19,11 @@ import { FormAction } from '../../../models/shared/interfaces/form.interface';
 export class TarefaComponent {
   constructor(
     private taskService: TaskService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private errorService: ErrorService,
+    private toaster: ToastrService,
+    private authService: AuthService,
+    private router: Router,
   ){
     this.route.paramMap.subscribe(params => {
       if(params.get('id') != undefined){
@@ -53,7 +61,25 @@ export class TarefaComponent {
           this.taskService.buscarTarefa(this.id);
         }
       },
-      error: (error) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.errorService.enviarErro(error.status, error.error.message, 'Página de Tarefa').subscribe({
+          next: response => {
+            if(response){
+              this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            if(error.status == 401){
+              this.authService.logout();
+              this.router.navigate(['/login']);
+              this.toaster.error("Tempo expirou, por favor, logue novamente!");
+            }
+            if(error){
+              this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
+            }
+          }
+        })
+      }
     })
   }
 

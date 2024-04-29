@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { PlatformLocation, isPlatformBrowser } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -65,8 +66,7 @@ export class RecuperacaoService {
         this.invalidLink();
         return false;
       },
-      error: error => {
-        console.log(error)
+      error: (error: HttpErrorResponse) => {
         this.invalidLink();
         return false;
       }

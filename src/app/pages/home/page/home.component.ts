@@ -1,6 +1,10 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, Input } from '@angular/core';
 import { TaskService } from '../../../services/task.service';
 import { FormAction } from '../../../models/shared/interfaces/form.interface';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from '../../../services/error.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +12,10 @@ import { FormAction } from '../../../models/shared/interfaces/form.interface';
 })
 export class HomeComponent{
   constructor(
-    private taskService: TaskService
+    private taskService: TaskService,
+    private errorService: ErrorService,
+    private toaster :ToastrService,
+    private authService: AuthService,
   ) {}
 
   @Input() tarefa?: number;
@@ -30,7 +37,24 @@ export class HomeComponent{
           }
         }
       },
-      error: (error) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        if(error.status == 401){
+          this.toaster.info('Por favor, faça login novamente!');
+          this.authService.logout();
+        }
+        this.errorService.enviarErro(error.status, error.error.message, 'Home').subscribe({
+          next: response => {
+            if(response){
+              this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            if(error){
+              this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
+            }
+          }
+        })
+      }
     })
     this.task = '';
   }

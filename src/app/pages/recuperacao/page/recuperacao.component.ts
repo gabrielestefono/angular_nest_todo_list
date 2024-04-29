@@ -2,6 +2,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from '../../../services/error.service';
 
 @Component({
   selector: 'app-recuperacao',
@@ -12,7 +14,8 @@ export class RecuperacaoComponent {
   constructor(
     private form: FormBuilder,
     private toaster: ToastrService,
-    private authService: AuthService
+    private authService: AuthService,
+    private readonly errorService: ErrorService,
   ){}
 
   formularioRecuperacao = this.form.group({
@@ -20,7 +23,6 @@ export class RecuperacaoComponent {
   })
 
   enviarForm(): void
-  // TODO:  Colocar mensagens de feedback mais intuitivas
   {
     if(this.formularioRecuperacao.valid){
       this.authService.enviarEmailRecuperacao(this.formularioRecuperacao.value.email!).subscribe({
@@ -29,8 +31,19 @@ export class RecuperacaoComponent {
             this.toaster.success("Um email foi enviado para o email informado!");
           }
         },
-        error: error => {
-          this.toaster.error("Ocorreu um erro, tente novamente em alguns minutos!")
+        error: (error: HttpErrorResponse) => {
+          this.errorService.enviarErro(error.status, error.error.message, 'Recuperação (Envio Email)').subscribe({
+            next: response => {
+              if(response){
+                this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
+              }
+            },
+            error: (error: HttpErrorResponse) => {
+              if(error){
+                this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
+              }
+            }
+          })
         }
       })
     }else{

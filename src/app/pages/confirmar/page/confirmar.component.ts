@@ -30,14 +30,18 @@ export class ConfirmarComponent implements OnInit{
         }
       },
       error: (error: HttpErrorResponse) => {
+        if(error.status == 401){
+          this.toaster.info('O tempo expirou, por favor, tente novamente!');
+          this.authService.logout();
+        }
         this.errorService.enviarErro(error.status, error.error.message, 'Confirmar').subscribe({
           next: response => {
             if(response){
               this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
             }
           },
-          error: response => {
-            if(response){
+          error: (error: HttpErrorResponse) => {
+            if(error){
               this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
             }
           }

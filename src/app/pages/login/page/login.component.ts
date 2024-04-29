@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '../../../services/error.service';
-import { response } from 'express';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,6 @@ import { response } from 'express';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -23,6 +22,7 @@ export class LoginComponent {
     private router: Router,
     private toaster: ToastrService,
     private errorService: ErrorService,
+    private loadingService: LoadingService,
   ){}
 
   public formularioLogin = this.formBuilder.group({
@@ -31,8 +31,7 @@ export class LoginComponent {
   })
 
   fazerLogin(){
-    // TODO: Refatorar código
-    // TODO: Melhorar mensagens
+    this.loadingService.loading(true);
     if(this.formularioLogin.valid){
       this.authService.login(this.formularioLogin.value.email!, this.formularioLogin.value.senha!).subscribe({
         next: response => {
@@ -42,9 +41,11 @@ export class LoginComponent {
           this.formularioLogin.reset();
           this.toaster.success(`Seja bem-vindo(a)!`);
           this.authService.atualizarLoginStatus()
+          this.loadingService.loading(false);
           this.router.navigate(["/"])
         },
         error: (error: HttpErrorResponse) => {
+          this.loadingService.loading(false);
           if(error.status == 404){
             this.toaster.error('Usuário não encontrado!');
             this.formularioLogin.get('email')!.setErrors({incorreto: true});
@@ -59,8 +60,8 @@ export class LoginComponent {
                   this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
                 }
               },
-              error: response => {
-                if(response){
+              error: (error: HttpErrorResponse) => {
+                if(error){
                   this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
                 }
               }
@@ -69,6 +70,7 @@ export class LoginComponent {
         }
       })
     }else{
+      this.loadingService.loading(false);
       if(this.formularioLogin.get('email')!.errors){
         this.formularioLogin.get('email')!.setErrors({ incorreto: true });
         this.toaster.info('Verifique o campo email!');
