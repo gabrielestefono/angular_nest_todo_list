@@ -5,6 +5,7 @@ import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '../../../services/error.service';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-registrar',
@@ -19,6 +20,7 @@ export class RegistrarComponent {
     private router: Router,
     private toaster: ToastrService,
     private errorService: ErrorService,
+    private loadingService: LoadingService,
   ){}
 
   public formularioRegistro = this.formBuilder.group({
@@ -46,6 +48,7 @@ export class RegistrarComponent {
   }
 
   registrarUsuario() {
+    this.loadingService.loading(true);
     this.authService.registrar(
       this.formularioRegistro.value.nome!,
       this.formularioRegistro.value.email!,
@@ -53,6 +56,7 @@ export class RegistrarComponent {
       this.formularioRegistro.value.senha_confirmacao!
     ).subscribe({
       next: response => {
+        this.loadingService.loading(false);
         if(response){
           this.toaster.success("Registrado com Sucesso! Por favor, faça login!");
           this.router.navigate(["/login"]);
@@ -61,11 +65,13 @@ export class RegistrarComponent {
       error: (error: HttpErrorResponse) => {
         this.errorService.enviarErro(error.status, error.error.message, 'Registrar').subscribe({
           next: response => {
+            this.loadingService.loading(false);
             if(response){
               this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
             }
           },
           error: (error: HttpErrorResponse) => {
+            this.loadingService.loading(false);
             if(error){
               this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
             }

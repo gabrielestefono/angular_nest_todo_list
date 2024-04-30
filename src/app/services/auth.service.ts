@@ -1,7 +1,10 @@
+import { ToastrService } from 'ngx-toastr';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { LoadingService } from './loading.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +13,11 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
+    private loadingService: LoadingService,
+    private router: Router,
+    private toaster: ToastrService,
   ) {}
-  private _backend = "http://localhost:3000/";
-
+  private _backend = "https://angular-nest-todo-list-backend.vercel.app/";
   private loginStatus = new BehaviorSubject<boolean>(this.cookieService.get('jwt_token') ? true : false);
 
   login(email: string, senha: string): Observable<any>
@@ -38,7 +43,12 @@ export class AuthService {
   }
 
   async logout(){
-    return this.cookieService.delete('jwt_token');
+    this.loadingService.loading(true);
+    const retorno = this.cookieService.delete('jwt_token');
+    this.loadingService.loading(false);
+    this.router.navigate(["login"]);
+    this.toaster.success("Volte sempre!")
+    return retorno;
   }
 
   enviarEmailConfirmacao()

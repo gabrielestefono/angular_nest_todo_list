@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '../../../services/error.service';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-recuperar',
@@ -20,6 +21,7 @@ export class RecuperarComponent {
     private router: Router,
     private platformLocation: PlatformLocation,
     private errorService: ErrorService,
+    private loadingService: LoadingService,
   ){}
 
   formRecuperacao = this.formBuilder.group({
@@ -38,14 +40,17 @@ export class RecuperarComponent {
 
   enviarForm(){
     if(this.formRecuperacao.valid){
+      this.loadingService.loading(true);
       const url = new URL(this.platformLocation.href);
       const token = url.searchParams.get('token');
       if(!token){
         this.toaster.error('Token inválido');
+        this.loadingService.loading(false);
         this.router.navigate(['/login']);
       }
       this.authService.mudarSenha(this.formRecuperacao.value.senha!, token!).subscribe({
         next: response => {
+          this.loadingService.loading(false);
           if(response){
             this.toaster.success("Senha alterada! Por favor, logue novamente");
             this.router.navigate(['/login']);
@@ -54,11 +59,13 @@ export class RecuperarComponent {
         error: (error: HttpErrorResponse) => {
           this.errorService.enviarErro(error.status, error.error.message, 'Recuperar').subscribe({
             next: response => {
+              this.loadingService.loading(false);
               if(response){
                 this.toaster.error('Erro interno! O administrador do website acabou de receber um email sobre este erro!');
               }
             },
             error: (error: HttpErrorResponse) => {
+              this.loadingService.loading(false);
               if(error){
                 this.toaster.error("Erro! Verifique sua conexão com a internet ou tente novamente mais tarde!");
               }

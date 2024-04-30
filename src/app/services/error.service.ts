@@ -8,7 +8,7 @@ export class ErrorService {
   constructor(
     private http: HttpClient,
   ){}
-  private _backend = "http://localhost:3000/";
+  private _backend = "https://angular-nest-todo-list-backend.vercel.app/";
 
   enviarErro(status: number, descricao: string, pagina: string){
     return this.http.post(`${this._backend}error`, {
